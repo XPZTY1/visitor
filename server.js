@@ -1,20 +1,26 @@
 const express = require('express');
 const fs = require('fs');
-const app = express();
-const port = 3000;
+const path = require('path');
 
-// โหลดข้อมูลจำนวนผู้เข้าชม
+const app = express();
+const PORT = 3000;
+
+let counterFile = path.join(__dirname, 'counter.json');
+
+// โหลดจำนวนจากไฟล์ หรือเริ่มที่ 0
 let visitors = 0;
-if (fs.existsSync('counter.json')) {
-    visitors = JSON.parse(fs.readFileSync('counter.json')).count;
+if (fs.existsSync(counterFile)) {
+    visitors = JSON.parse(fs.readFileSync(counterFile)).count;
 }
 
-app.get('/', (req, res) => {
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/visit', (req, res) => {
     visitors++;
-    fs.writeFileSync('counter.json', JSON.stringify({ count: visitors }));
-    res.send(`<h1>มีคนเข้ามาแล้ว ${visitors} คน</h1>`);
+    fs.writeFileSync(counterFile, JSON.stringify({ count: visitors }));
+    res.json({ count: visitors });
 });
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
 });

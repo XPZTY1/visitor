@@ -2,16 +2,15 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Visitor Counter</title>
+    <title>Check Visitors</title>
 </head>
 <body>
-    <h1>จำนวนผู้เข้าชม: <span id="count">Loading...</span></h1>
-
+    <h1>My Website</h1>
     <script>
         fetch('/visit')
             .then(res => res.json())
             .then(data => {
-                document.getElementById('count').textContent = data.count;
+                console.log(`มีผู้เข้าชมแล้ว: ${data.count} คน`);
             });
     </script>
 </body>
